@@ -6,11 +6,11 @@ public class Loops {
   public static void hello(int n){
     
     for (int i = 1; i<=n; i++){
-      if (i%10 == 1 || i%100 == 1){
+      if (i%10 == 1 && i!= 11){
         System.out.println(i+"st hello");
-      }else if (i%10 == 2 || i%100 == 2){
+      }else if (i%10 == 2 && i != 12){
         System.out.println(i+"nd hello");
-      }else if(i%10 == 3 || i%100 == 3){
+      }else if(i%10 == 3 && i != 13){
         System.out.println(i+"rd hello");
       }else{
         System.out.println(i+"th hello");
@@ -59,41 +59,59 @@ public class Loops {
     return factorList;
   }
     
-  public static double rollDie(int maxVal){
-    
-    double randNum = Math.random();
-    double val = maxVal*randNum;
-    double roll = Math.floor(val)+1;
-    return roll;
+ 
+  private static int rollDie(){
+    return (int)(Math.random()*6)+1;
   }
 
-  public static void pepysSimulation(){
-    
-    int totalOnes6 = 0;
-    int totalOnes12 = 0;
-    for (int a = 0; a<100; a++){
-      int oneCount6 = 0;
-      int oneCount12 = 0;
-      for (int i = 0; i<6; i++){
-        if (rollDie(6)<1){
-          oneCount6++;
+  public static void pepys(){
+    final int TRIALS = 100000;
+    int oneOf6 = 0;
+    int twoOf12 = 0;
+    for (int trial = 0; trial<TRIALS; trial++){
+      int oneCount = 0;
+      for (int roll = 0; roll<6; roll++){
+        int roll1 = rollDie();
+        //System.out.println("Just rolled a " + roll1);
+        if (roll1 == 1){
+          oneCount ++;
         }
-        totalOnes6 += oneCount6;
-      for (int x = 0; i <12; x++){
-        if (rollDie(6)==1){
-          oneCount12 ++;
+      }
+      //System.out.println("About to decide whether we passed or failed...");
+      if (oneCount>=1){
+        oneOf6 ++;
+      } 
+      oneCount = 0;
+      for (int roll = 0; roll<12; roll++){
+        int roll2 = rollDie();
+        if (roll2 ==1){
+          oneCount ++;
         }
-        totalOnes12 += oneCount12;
       }
+      if (oneCount>=2){
+        twoOf12 ++;
       }
-      double avgOnes6 = totalOnes6/100;
-      double avgOnes12 = totalOnes12/100;
-      System.out.println(avgOnes6);
-      System.out.println(avgOnes12);
-  }
+    }
+    System.out.println("rolled one at least once out of 6 rolls "+(double)oneOf6/TRIALS *100+"% of the time");
+    System.out.println("rolled one at least twice out of 12 rolls "+(double)twoOf12/TRIALS*100+"% of the time");
+
   }
     
-    
+  private static int randDoor(){
+    return (int)(Math.random()*3)+1;
+  }
+
+  public static void montyHall(int n){
+    final int MAXDOORVAL = 6;
+    for (int trial = 0; trial<n; trial++){
+      int winningDoor = randDoor();
+      int initialChoice = randDoor();
+      if (winningDoor!=initialChoice){
+        int newmax = MAXDOORVAL - (6-winningDoor-initialChoice);
+        
+      }
+    }
+  }
   
 
   public static void main(String[] args) {
@@ -103,7 +121,8 @@ public class Loops {
     System.out.println(nRandoms(2));
     System.out.println(isPrime(59));
     System.out.println(Arrays.toString(getFactors(59)));
-    pepysSimulation();
+    pepys();
+    
 
 
   }
